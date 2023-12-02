@@ -27,27 +27,8 @@ paths:
     get:
     # grouping the paths
       tags:
-        - Greetings
-      summary: return a greeting message
-      responses:
-        200:
-          description: Success, OK
-          content:
-            application/json:
-              schema:
-                type: string
-                example: "greetingString"
-        400:
-          description: Bad request
-        500:
-          description: Internal Server Error
-
-  /add:
-    get:
-    # grouping the paths
-      tags:
-        - Add
-      summary: return an object
+        - Greeting Message
+      summary: return an object containing greeting message
       responses:
         200:
           description: Success, OK
@@ -56,83 +37,57 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
+                  success: 
+                    type: boolean
+                  message:
                     type: string
-                  name:
-                    type: string
-                  description:
-                    type: string
+        400:
+          description: Bad request
+        500:
+          description: Internal Server Error
+
+  /show-todo:
+    get:
+    # grouping the paths
+      tags:
+        - Todo List
+      summary: return an array of todos
+      responses:
+        200:
+          description: Success, OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  todos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        status:
+                          type: string
+                        createdAt:
+                          type: string
+                        updatedAt:
+                          type: string
         400:
           description: Bad request
         500:
           description: Internal Server Error
   
-  /remove/{id}:
-    delete:
-    # grouping the paths
-      tags:
-        - Delete
-      summary: return an array of courses
-      responses:
-        200:
-          description: Success, OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    name:
-                      type: string
-                    price:
-                      type: number
-        400:
-          description: Bad request
-        500:
-          description: Internal Server Error
-
-  /update/{id}:
-    put:
-    # grouping the paths
-      tags:
-        - Req.Params
-      summary: return an object containing a course based on courseId
-      # for parameter passed inside the path
-      parameters:
-        - name: courseId
-          in: path
-          required: true
-          default: 11
-          schema:
-            type: string
-      responses:
-        200:
-          description: Success, OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  name:
-                    type: string
-                  price:
-                    type: number
-        400:
-          description: Bad request
-        500:
-          description: Internal Server Error
-
-  /addcourse:
+  /add-todo:
     # request type is post
     post:
       tags:
-        - Req.Body
-      summary: add a new course to the course array
+        - Add Todo
+      summary: add a new todo to the list
       # type of data taken
       consumes:
         - application/json
@@ -150,12 +105,12 @@ paths:
               # takes an object
               type: object
               properties:
-                id:
-                  type: string
                 name:
                   type: string
-                price:
-                  type: number
+                status:
+                  type: string
+                  enum: [done,not done]
+                  default: not done
       responses:
         200:
         # return the entered object
@@ -165,35 +120,70 @@ paths:
               schema:
                 type: object
                 properties:
-                  id: 
+                  success: 
+                    type: boolean
+                  message:
                     type: string
-                  name:
-                    type: string
-                  price:
-                    type: number
+        400:
+          description: Bad request
+        500:
+          description: Internal Server Error
+  
+  /remove-todo/{id}:
+    delete:
+    # grouping the paths
+      tags:
+        - Delete Todo
+      summary: remove a todo from list
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success, OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                    message:
+                      type: string
         400:
           description: Bad request
         500:
           description: Internal Server Error
 
-  /query:
-    get:
+  /update-todo/{id}:
+    put:
+    # grouping the paths
       tags:
-        - Req.Query
-      summary: returns an object containing query data
+        - Update Todo
+      summary: update a todo in list
+      # for parameter passed inside the path
       parameters:
-        - name: location
-          in: query
+        - name: id
+          in: path
           required: true
           schema:
             type: string
-            enum: [delhi,mumbai,pune]
-        - name: device
-          in: query
-          required: true
-          schema:
-            type: string
-            enum: [mobile,web]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [done,not done]
+                  default: not done
       responses:
         200:
           description: Success, OK
@@ -202,33 +192,11 @@ paths:
               schema:
                 type: object
                 properties:
-                  location:
-                    type: string
-                  device:
+                  success:
+                    type: boolean
+                  message:
                     type: string
         400:
-          description: Bad Request
+          description: Bad request
         500:
           description: Internal Server Error
-
-  /uploadImage:
-    post:
-      tags:
-        - Image-Upload
-      summary: upload an image
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-      responses:
-        200:
-          description: Success, OK
-        400:
-          description: Bad Request
-        500:
-          description: Internal Server error

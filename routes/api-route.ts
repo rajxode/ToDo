@@ -6,6 +6,7 @@ const router = express.Router();
 
 const todoController = require('../controllers/todoController');
 
+router.route('/').get(todoController.greet);
 router.route('/show-todo').get(todoController.show);
 router.route('/add-todo').post(todoController.add);
 router.route('/remove-todo/:id').delete(todoController.remove);

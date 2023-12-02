@@ -10,6 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Todo = require('../models/Todo');
+module.exports.greet = (req, res) => {
+    return res.status(200).json({
+        success: true,
+        message: 'Hello World, Greetings !!!'
+    });
+};
 module.exports.show = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const todos = yield Todo.find({});
@@ -26,12 +32,11 @@ module.exports.show = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 module.exports.add = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('data', req.body);
-        // const { name , status } = req.body;
-        // const todo = await Todo.create({
-        //     name,
-        //     status
-        // });
+        const { name, status } = req.body;
+        const todo = yield Todo.create({
+            name,
+            status
+        });
         return res.status(201).json({
             success: true,
             message: 'Todo Added'
@@ -61,15 +66,14 @@ module.exports.remove = (req, res) => __awaiter(void 0, void 0, void 0, function
 module.exports.update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const { data } = req.body;
-        yield Todo.findByIdAndUpdate(id, data, {
+        const todo = yield Todo.findByIdAndUpdate(id, req.body, {
             new: true,
             runValidators: true,
             useFindAndModify: false,
         });
         return res.status(200).json({
             success: true,
-            message: 'Todo Updated'
+            message: 'Todo Updated',
         });
     }
     catch (error) {

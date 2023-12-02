@@ -3,6 +3,14 @@ import {Request,Response} from 'express';
 const Todo = require('../models/Todo');
 
 
+module.exports.greet = (req:Request,res:Response) => {
+    return res.status(200).json({
+        success:true,
+        message:'Hello World, Greetings !!!'
+    })
+}
+
+
 module.exports.show = async(req : Request,res : Response) => {
     try {
         const todos = await Todo.find({});
@@ -59,11 +67,10 @@ module.exports.remove = async(req:Request,res:Response) => {
 module.exports.update = async(req:Request,res:Response) => {
     try {
         const { id } = req.params;
-        const { data } = req.body;
 
-        await Todo.findByIdAndUpdate(
+        const todo = await Todo.findByIdAndUpdate(
                         id,
-                        data,
+                        req.body,
                         { 
                             new:true,
                             runValidators:true,
@@ -73,7 +80,7 @@ module.exports.update = async(req:Request,res:Response) => {
 
         return res.status(200).json({
             success:true,
-            message:'Todo Updated'
+            message:'Todo Updated',
         })
     } catch (error : any) {
         return res.status(500).json({
