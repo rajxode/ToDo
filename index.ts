@@ -16,6 +16,13 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const PORT = process.env.PORT;
 
+app.use(express.json());
+app.use(express.urlencoded(
+    {
+        extended:true
+    }
+));
+
 app.use('/',require('./routes/index'));
 
 app.listen(PORT,() => console.log(`server running on port: ${PORT}`));

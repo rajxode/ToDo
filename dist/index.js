@@ -15,5 +15,9 @@ const swaggerDocument = yamljs_1.default.load('./swagger.yaml');
 // rendering the swagger file
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 const PORT = process.env.PORT;
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({
+    extended: true
+}));
 app.use('/', require('./routes/index'));
 app.listen(PORT, () => console.log(`server running on port: ${PORT}`));
