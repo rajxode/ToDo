@@ -24,11 +24,12 @@ servers:
 # routes
 paths:
   /:
+    # req type
     get:
-    # grouping the paths
       tags:
         - Greeting Message
       summary: return an object containing greeting message
+      # response
       responses:
         200:
           description: Success, OK
@@ -46,12 +47,14 @@ paths:
         500:
           description: Internal Server Error
 
+  # path
   /show-todo:
+    # req type
     get:
-    # grouping the paths
       tags:
         - Todo List
       summary: return an array of todos
+      # response
       responses:
         200:
           description: Success, OK
@@ -82,8 +85,9 @@ paths:
         500:
           description: Internal Server Error
   
+  # path
   /add-todo:
-    # request type is post
+    # request type
     post:
       tags:
         - Add Todo
@@ -94,15 +98,13 @@ paths:
       # type of output produced
       produces:
         - application/json
-      # params passed to add new course
+      # data taken
       requestBody:
-        # all values are required
         required: true
         # content 
         content:
           application/json:
             schema:
-              # takes an object
               type: object
               properties:
                 name:
@@ -111,9 +113,9 @@ paths:
                   type: string
                   enum: [done,not done]
                   default: not done
+      # response
       responses:
         200:
-        # return the entered object
           description: Success, OK
           content:
             application/json:
@@ -129,18 +131,21 @@ paths:
         500:
           description: Internal Server Error
   
+  # path
   /remove-todo/{id}:
+    # req type
     delete:
-    # grouping the paths
       tags:
         - Delete Todo
       summary: remove a todo from list
+      # req param
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: string
+      # response
       responses:
         200:
           description: Success, OK
@@ -160,19 +165,21 @@ paths:
         500:
           description: Internal Server Error
 
+  # path 
   /update-todo/{id}:
+    # req type
     put:
-    # grouping the paths
       tags:
         - Update Todo
       summary: update a todo in list
-      # for parameter passed inside the path
+      # params
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: string
+      # req body, for taking data
       requestBody:
         required: true
         content:
@@ -184,6 +191,7 @@ paths:
                   type: string
                   enum: [done,not done]
                   default: not done
+      # response
       responses:
         200:
           description: Success, OK
