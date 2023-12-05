@@ -1,0 +1,210 @@
+openapi: 3.0.0
+info: # info about the project
+  title: ToDo Application
+  description: add, update and remove Todos from list
+  version: 1.1.0
+
+servers:
+  # server url
+  - url: "{protocol}://localhost:5000/api/{version}" 
+    description: for local host server
+    variables:
+      # versions of api
+      version:
+        enum:
+          - v1
+        default: v1
+      #  protocols 
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+
+# routes
+paths:
+  /:
+    # req type
+    get:
+      tags:
+        - Greeting Message
+      summary: return an object containing greeting message
+      # response
+      responses:
+        200:
+          description: Success, OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: 
+                    type: boolean
+                  message:
+                    type: string
+        400:
+          description: Bad request
+        500:
+          description: Internal Server Error
+
+  # path
+  /show-todo:
+    # req type
+    get:
+      tags:
+        - Todo List
+      summary: return an array of todos
+      # response
+      responses:
+        200:
+          description: Success, OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  todos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        status:
+                          type: string
+                        createdAt:
+                          type: string
+                        updatedAt:
+                          type: string
+        400:
+          description: Bad request
+        500:
+          description: Internal Server Error
+  
+  # path
+  /add-todo:
+    # request type
+    post:
+      tags:
+        - Add Todo
+      summary: add a new todo to the list
+      # type of data taken
+      consumes:
+        - application/json
+      # type of output produced
+      produces:
+        - application/json
+      # data taken
+      requestBody:
+        required: true
+        # content 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                status:
+                  type: string
+                  enum: [done,not done]
+                  default: not done
+      # response
+      responses:
+        200:
+          description: Success, OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: 
+                    type: boolean
+                  message:
+                    type: string
+        400:
+          description: Bad request
+        500:
+          description: Internal Server Error
+  
+  # path
+  /remove-todo/{id}:
+    # req type
+    delete:
+      tags:
+        - Delete Todo
+      summary: remove a todo from list
+      # req param
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      # response
+      responses:
+        200:
+          description: Success, OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                    message:
+                      type: string
+        400:
+          description: Bad request
+        500:
+          description: Internal Server Error
+
+  # path 
+  /update-todo/{id}:
+    # req type
+    put:
+      tags:
+        - Update Todo
+      summary: update a todo in list
+      # params
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      # req body, for taking data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [done,not done]
+                  default: not done
+      # response
+      responses:
+        200:
+          description: Success, OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        400:
+          description: Bad request
+        500:
+          description: Internal Server Error
